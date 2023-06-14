@@ -1,0 +1,63 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.IO;
+
+namespace 程設二期末專題
+{
+    public partial class Form4 : Form
+    {
+        public Form4()
+        {
+            InitializeComponent();
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            // ファイルを選択するダイアログを表示
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\diary";
+            openFileDialog.Filter = "Rich Text Files|*.rtf";
+            openFileDialog.Title = "Please select RichTextFile";
+
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                string filePath = openFileDialog.FileName;
+
+                // リッチテキストボックスにファイルを読み込む
+                richTextBox1.LoadFile(filePath, RichTextBoxStreamType.RichText);
+
+            }
+            else
+            {
+                MessageBox.Show("File was not selected");
+            }
+            FileInfo f = new FileInfo(openFileDialog.FileName);
+            label2.Text = f.CreationTime.ToString("yyyy/MM/dd") + "'s Diary";
+            label3.Text = "FullName : " + f.FullName;
+            label4.Text = "Name : " + f.Name;
+            label5.Text = "Length : " + (f.Length).ToString() + "byte";
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label5_Click(object sender, EventArgs e)
+        {
+
+        }
+    }
+}

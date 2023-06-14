@@ -1,0 +1,185 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.IO;
+
+namespace 程設二期末專題
+{
+    public partial class Form2 : Form
+    {
+        public Form2()
+        {
+            InitializeComponent();
+        }
+
+        private void colorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            toolStripStatusLabel1.Text = "Color Change";
+            DialogResult response;
+            response = colorDialog1.ShowDialog();
+            if (response == DialogResult.OK)
+            {
+                richTextBox1.SelectionColor = colorDialog1.Color;
+            }
+            else
+            {
+                toolStripStatusLabel1.Text = "";
+            }
+        }
+
+        private void 字型ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            toolStripStatusLabel1.Text = "Font Change";
+            toolStripStatusLabel1.Text = "Adjust the font";
+            if (fontDialog1.ShowDialog() == DialogResult.OK)
+            {
+                richTextBox1.SelectionFont = fontDialog1.Font;
+            }
+            else
+            {
+                toolStripStatusLabel1.Text = "";
+            }
+
+        }
+
+        private void toolStripTextBox1_Click(object sender, EventArgs e)
+        {
+            if (toolStripTextBox1.Text != "")
+            {
+                richTextBox1.SelectionFont = new Font(toolStripComboBox1.Text, float.Parse(toolStripTextBox1.Text));
+            }
+        }
+
+        private void toolStripComboBox1_Click(object sender, EventArgs e)
+        {
+            if (toolStripComboBox1.Text != "" && toolStripTextBox1.Text != "")
+            {
+                richTextBox1.SelectionFont = new Font(toolStripComboBox1.Text, float.Parse(toolStripTextBox1.Text));
+            }
+        }
+
+        private void saveDiaryToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (groupBox1.Enabled == true)
+            {
+                MessageBox.Show("Please select Today's weather and feeling");
+                return;
+            }
+            // 保存先フォルダのパスを作成
+            string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            string diaryFolderPath = Path.Combine(desktopPath, "diary");
+
+            // 保存先フォルダが存在しない場合は作成
+            if (!Directory.Exists(diaryFolderPath))
+            {
+                Directory.CreateDirectory(diaryFolderPath);
+            }
+
+            // 今日の日付を取得してファイル名に使用
+            string today = DateTime.Now.ToString("yyyyMMdd");
+            string fileName = today + ".rtf";
+
+            // ファイルパスを作成
+            string filePath = Path.Combine(diaryFolderPath, fileName);
+
+            // ファイルが既に存在する場合はメッセージを表示して上書き確認
+            if (File.Exists(filePath))
+            {
+                DialogResult result = MessageBox.Show("File already exists. Do you want to overwrite and save?", "Yes", MessageBoxButtons.YesNo);
+                if (result == DialogResult.No)
+                {
+                    return;
+                }
+            }
+
+            // リッチテキストボックスの内容をファイルに保存
+            richTextBox1.SaveFile(filePath, RichTextBoxStreamType.RichText);
+
+            MessageBox.Show("File was saved");
+        }
+
+        private void clearToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            richTextBox1.Clear();
+        }
+
+        private void changeBackGroundColorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            toolStripStatusLabel1.Text = "BackGroundColor Change";
+            DialogResult response;
+            response = colorDialog2.ShowDialog();
+            if (response == DialogResult.OK)
+            {
+                richTextBox1.BackColor = colorDialog2.Color;
+            }
+            else
+            {
+                toolStripStatusLabel1.Text = "";
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            groupBox1.Enabled = false;
+            groupBox2.Enabled = false;
+            string weather = "";
+            string feel = "";
+            if (checkBox1.Checked)
+            {
+                weather = weather + checkBox1.Text + " ";
+            }
+            if (checkBox2.Checked)
+            {
+                weather = weather + checkBox2.Text + " ";
+            }
+            if (checkBox3.Checked)
+            {
+                weather = weather + checkBox3.Text + " ";
+            }
+            if (checkBox4.Checked)
+            {
+                weather = weather + checkBox4.Text + " ";
+            }
+            if (checkBox5.Checked)
+            {
+                weather = weather + textBox1.Text + " ";
+            }
+            weather = weather + "\r\n";
+   
+            if (checkBox6.Checked)
+            {
+                feel = feel + checkBox6.Text + " ";
+            }
+            if (checkBox7.Checked)
+            {
+                feel = feel + checkBox7.Text + " ";
+            }
+            if (checkBox8.Checked)
+            {
+                feel = feel + checkBox8.Text + " ";
+            }
+            if (checkBox9.Checked)
+            {
+                feel = feel + checkBox9.Text + " ";
+            }
+            if (checkBox10.Checked)
+            {
+                feel = feel + textBox2.Text + " ";
+            }
+            feel = feel + "\r\n";
+            richTextBox1.Text = "Today's weather : " + weather + "Today's feel : " +feel + richTextBox1.Text;
+
+        }
+
+        private void endToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+    }
+}
